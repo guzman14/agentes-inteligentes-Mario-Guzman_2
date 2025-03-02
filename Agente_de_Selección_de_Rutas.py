@@ -1,4 +1,4 @@
-import random
+import randomimport random
 
 class AgenteSeleccionRutas:
     def __init__(self, size=5):
@@ -8,10 +8,17 @@ class AgenteSeleccionRutas:
         self.meta = (size - 1, size - 1)
 
     def mostrar_mapa(self):
-        """Muestra el mapa con valores de recompensa."""
+        """Muestra el mapa con valores de recompensa, destacando inicio y meta."""
         print("Mapa de recompensas:")
-        for fila in self.mapa:
-            print(" ".join(f"{v:2}" for v in fila))
+        for i in range(self.size):
+            for j in range(self.size):
+                if (i, j) == self.inicio:
+                    print("🔵", end=" ")
+                elif (i, j) == self.meta:
+                    print("🏁", end=" ")
+                else:
+                    print(f"{self.mapa[i][j]:2}", end=" ")
+            print()
         print()
 
     def buscar_mejor_ruta(self):
@@ -37,9 +44,10 @@ class AgenteSeleccionRutas:
         recompensa, ruta = self.buscar_mejor_ruta()
         print("Ruta seleccionada con mayor utilidad:")
         for paso in ruta:
-            print(paso, end=" -> ")
-        print(f"\nUtilidad total: {recompensa}")
+            print(f"({paso[0]},{paso[1]})", end=" -> ")
+        print(f"🏁\nUtilidad total: {recompensa}")
 
 if __name__ == "__main__":
     agente = AgenteSeleccionRutas()
     agente.ejecutar()
+
