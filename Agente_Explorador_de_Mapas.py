@@ -1,4 +1,4 @@
-import random
+iimport random
 import time
 
 class AgenteExplorador:
@@ -6,53 +6,39 @@ class AgenteExplorador:
         self.size = size
         self.matriz = [["." for _ in range(size)] for _ in range(size)]
         
-        # Posición inicial del agente
-        self.x, self.y = 0, 0
-        self.matriz[self.x][self.y] = "A"
+        # Posición inicial del agente (esquina superior izquierda)
+        self.agente_x, self.agente_y = 0, 0
+        self.matriz[self.agente_x][self.agente_y] = "A"
         
-        # Memoria de posiciones visitadas
+        # Almacenar posiciones visitadas
         self.visitadas = set()
-        self.visitadas.add((self.x, self.y))
-
-    def mostrar_mapa(self):
+        self.visitadas.add((self.agente_x, self.agente_y))
+    
+    def mostrar_matriz(self):
         """Imprime la cuadrícula con la posición del agente."""
         for fila in self.matriz:
             print(" ".join(fila))
         print("\n")
-
-    def posibles_movimientos(self):
-        """Determina los movimientos posibles evitando celdas ya visitadas."""
-        movimientos = []
-        if self.x > 0 and (self.x - 1, self.y) not in self.visitadas:
-            movimientos.append((-1, 0))  # Arriba
-        if self.x < self.size - 1 and (self.x + 1, self.y) not in self.visitadas:
-            movimientos.append((1, 0))   # Abajo
-        if self.y > 0 and (self.x, self.y - 1) not in self.visitadas:
-            movimientos.append((0, -1))  # Izquierda
-        if self.y < self.size - 1 and (self.x, self.y + 1) not in self.visitadas:
-            movimientos.append((0, 1))   # Derecha
-        return movimientos
-
+    
     def mover_agente(self):
-        """Mueve el agente explorando nuevas zonas hasta que no haya más opciones."""
-        while True:
-            movimientos = self.posibles_movimientos()
-            if not movimientos:
-                print("Exploración completa! 🚀")
-                break
-            
-            # Elegir un movimiento aleatorio
-            dx, dy = random.choice(movimientos)
-            self.matriz[self.x][self.y] = "."  # Limpia la posición anterior
-            self.x += dx
-            self.y += dy
-            self.matriz[self.x][self.y] = "A"
-            self.visitadas.add((self.x, self.y))
-            
-            self.mostrar_mapa()
-            time.sleep(1)
+        """Mueve el agente explorando nuevas zonas hasta que no queden opciones."""
+        movimientos = [(0,1), (1,0), (0,-1), (-1,0)]  # Derecha, abajo, izquierda, arriba
+        while len(self.visitadas) < self.size * self.size:
+            random.shuffle(movimientos)
+            for dx, dy in movimientos:
+                nuevo_x, nuevo_y = self.agente_x + dx, self.agente_y + dy
+                if 0 <= nuevo_x < self.size and 0 <= nuevo_y < self.size and (nuevo_x, nuevo_y) not in self.visitadas:
+                    self.matriz[self.agente_x][self.agente_y] = "V"  # Marcar como visitado
+                    self.agente_x, self.agente_y = nuevo_x, nuevo_y
+                    self.matriz[self.agente_x][self.agente_y] = "A"  # Nueva posición del agente
+                    self.visitadas.add((self.agente_x, self.agente_y))
+                    self.mostrar_matriz()
+                    time.sleep(1)
+                    break
+        print("¡Exploración completa! 🚀")
 
 if __name__ == "__main__":
     agente = AgenteExplorador()
-    agente.mostrar_mapa()
+    agente.mostrar_matriz()
     agente.mover_agente()
+
