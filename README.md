@@ -48,4 +48,3 @@ python agente_seleccion_rutas.py
 - Mejor visualización de los movimientos de los agentes en la consola.
 - Uso de estructuras de datos eficientes para mejorar el rendimiento.
 
-¡Explora estos agentes y mejora su funcionalidad según tus necesidades! 🚀
